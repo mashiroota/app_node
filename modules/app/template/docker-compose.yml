@@ -31,7 +31,7 @@ services:
     tty: true
     volumes:
       - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf
-      - ./cert:/etc/letsencrypt/live/${SERVER_NAME}
+      - ./cert:/etc/letsencrypt/live/${server_name}
       - ./nginx/conf.d:/etc/nginx/conf.d
     sysctls:
       - net.core.somaxconn=1024
