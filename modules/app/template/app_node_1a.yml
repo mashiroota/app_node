@@ -1,0 +1,134 @@
+version: '3.8'
+
+x-logging: &logging
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+x-deploy: &deploy
+  deploy:
+#    placement:
+#     constraints:
+#       - node.role==worker
+    mode: replicated
+    replicas: 1
+    update_config:
+      parallelism: 1
+      delay: 30s
+      failure_action: rollback
+      monitor: 5s
+      order: start-first
+    rollback_config:
+      parallelism: 1
+      delay: 30s
+      monitor: 5s
+      order: start-first
+    restart_policy:
+      condition: on-failure
+      delay: 5s
+      window: 30s 
+
+services:
+  portainer:
+    image: portainer/portainer:${PORTAINER_VERSION}
+    <<: *deploy
+    ports:
+      - ${PORTAINER_PORT}:${PORTAINER_PORT}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - type: bind
+        source: ./portainer/data
+        target: /data
+    commandpassgenport 
+    <<: *logging 
+    
+  webserver:
+    image: nginx:alpine
+    tty: true
+    <<: *deploy
+    healthcheck:
+      test: ["CMD-SHELL", "wget http://localhost:8066/health --quiet --tries=1 --spider || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    volumes:
+      - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./cert:/etc/letsencrypt/live/${server_name}
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    sysctls:
+      - net.core.somaxconn=1024
+      - net.ipv4.tcp_syncookies=0
+    ports:
+      - 80:80
+      - 443:443
+    <<: *logging
+
+  haproxy:
+    image: haproxy:alpine
+    ports:
+      - mode: host
+        protocol: tcp
+        published: ${HAPROXY_PORT}
+        target: ${HAPROXY_PORT}
+      - mode: host
+        protocol: tcp
+        published: ${HAPROXY_STATS_PORT}
+        target: ${HAPROXY_STATS_PORT} 
+    sysctls:
+      - net.core.somaxconn=1024
+      - net.ipv4.tcp_syncookies=0
+    volumes:
+      - ./haproxy/config/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+      - ./cert:/etc/ssl/main
+      #- /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: ["CMD-SHELL", "nc localhost ${HAPROXY_PORT} </dev/null && echo 0 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    <<: *logging       
+   
+  socks:
+    image: mashiroota/microsocks:$${socks_verion}
+    <<: *deploy
+    ports:
+      - 1080:1080
+    environment:
+      - USER=$${socks_username}
+      - PASSWORD=$${socks_password}
+    healthcheck:
+      test: ["CMD-SHELL", "nc localhost 1080 </dev/null && echo 0 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    <<: *logging
+  
+  socks_direct:
+    image: mashiroota/microsocks:$${socks_verion}
+    ports:
+      - mode: host
+        protocol: tcp
+        published: ${SOCKS_DIRECT_PUBLIC_PORT}
+        target: 1080
+    environment:
+      - USER=$${socks_username}
+      - PASSWORD=$${socks_password}
+    healthcheck:
+      test: ["CMD-SHELL", "nc localhost 1080 </dev/null && echo 0 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    <<: *logging  
+
+networks:
+  app:
+    driver: overlay
+    ipam:
+      driver: default
+    
