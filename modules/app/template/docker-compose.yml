@@ -62,7 +62,7 @@ services:
     <<: *logging
   
   socks:
-    image: mashiroota/microsocks:$${socks_verion}
+    image: mashiroota/microsocks:$${socks_version}
     container_name: socks
     networks:
       - app

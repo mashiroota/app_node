@@ -36,7 +36,7 @@ VARC="command: -H unix:///var/run/docker.sock --admin-password "
 export genpass="$VARC $(htpasswd -nb -B admin "${PORTAINER_PASS}" | cut -d ":" -f 2 | sed -r 's/[$]/\x24\x24/g')"
 #echo $genpass
 sed -i 's|commandpassgenport|'"$${genpass}"'|' /opt/app/docker-compose.yml
-sed -i 's|commandpassgenport|'"$${genpass}"'|' /opt/app/app_node_a1.yml
+sed -i 's|commandpassgenport|'"$${genpass}"'|' /opt/app/app_node_1a.yml
 
 cd /opt/app
 docker stack deploy -c <(docker-compose -f app_node_1a.yml config) app

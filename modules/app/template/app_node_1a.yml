@@ -93,7 +93,7 @@ services:
     <<: *logging       
    
   socks:
-    image: mashiroota/microsocks:$${socks_verion}
+    image: mashiroota/microsocks:$${socks_version}
     <<: *deploy
     ports:
       - 1080:1080
@@ -109,7 +109,7 @@ services:
     <<: *logging
   
   socks_direct:
-    image: mashiroota/microsocks:$${socks_verion}
+    image: mashiroota/microsocks:$${socks_version}
     ports:
       - mode: host
         protocol: tcp
