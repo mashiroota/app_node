@@ -1,7 +1,3 @@
-#variable "letsencrypt_email" {
-#  description = "email address used to register with letsencrypt"
-#}
-
 variable "letsencrypt_api_endpoint" {
   default     = "https://acme-v02.api.letsencrypt.org/directory"
   description = "API endpoint.  default to prod.  for staging use: https://acme-staging-v02.api.letsencrypt.org/directory"
@@ -31,8 +27,3 @@ variable "CF_API_KEY"  {
 
 variable "CF_EMAIL" {
 }
-
-/*
-variable "app_name" {
-}
-*/

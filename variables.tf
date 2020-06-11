@@ -50,6 +50,7 @@ variable "HAPROXY_STATS_PASSWORD" {
   default = "MysssStoNNgPAssWord"
 }
 variable "APP_NAME_1" {
+  default = "hap"
   description = "haproxy name"
 }
 
@@ -59,6 +60,7 @@ variable "SOCKS_VERSION" {
 }
 variable "SOCKS_USERNAME" {
   default = "admin"
+  description = "microsocks proxy user name"
 }
 variable "SOCKS_PASSWORD" {
   default = "sTONgMmmYPASwORDd"
@@ -72,6 +74,7 @@ variable "DOMAIN" {
   description = "domain name"
 }
 variable "APP_NAME" {
+  default = "port"
   description = "portraine name"
 }
 
