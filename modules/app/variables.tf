@@ -18,11 +18,12 @@ variable "SOCKS_DIRECT_PUBLIC_PORT" {
 }
 variable "SOCKS_VERSION" {
 }
+variable "SOCKS_DIRECT_VERSION" {
+}
 variable "SOCKS_PASSWORD" {
 }
 variable "SOCKS_USERNAME" {
 }
-
 variable "inst_pub_ip" {
 }
 variable "inst_priv_ip" {
@@ -34,6 +35,42 @@ variable "TERRAFORM_VERSION" {
 variable "USERNAME" {
 }
 variable "DOMAIN" {
+}
+variable "server_grafana"{
+}
+variable "GF_ADMIN_USER" {
+}
+variable "GF_ADMIN_PASSWORD" {
+}
+variable "GRAFANA_VERS" {
+}
+variable "RENDERER_VERS" {
+}
+variable "PROMETHEUS_VERS" {
+} 
+variable "ALERTMANAGER_VERS" {
+}
+variable "NODE_EXPORTER_VERS" {
+}
+variable "NGINX_PROMETHEUS_EXPORTER_VERS" {
+}
+variable "CADVISOR_VERS" {
+}
+variable "INFLUXDB_VERS" {
+}
+variable "INFLUXDB_ADMIN_USER" {
+}
+variable "INFLUXDB_ADMIN_PASSWORD" {
+}
+variable "INFLUXDB_USER" {
+}
+variable "INFLUXDB_USER_PASSWORD" {
+}
+variable "TELEGRAF_VERS" {
+}
+variable "SLACK_API_URL" {
+}
+variable "SLACK_API_URL_GF" {
 }
 variable "server_name" { 
 }

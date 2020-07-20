@@ -18,3 +18,7 @@ output "cf_recor_FQDN" {
 output "cf_recor_FQDN_1" {
   value =  cloudflare_record.app_name_1.hostname
 }
+
+output "cf_recor_FQDN_GRAFANA" {
+  value =  cloudflare_record.grafana.hostname
+}

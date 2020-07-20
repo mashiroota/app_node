@@ -7,6 +7,10 @@ x-logging: &logging
       max-size: "10m"
       max-file: "3"
 
+x-labels: &labels
+  labels:
+      org.label-schema.group: "work_node_app_1a"      
+
 x-deploy: &deploy
   deploy:
 #    placement:
@@ -43,6 +47,7 @@ services:
         target: /data
     commandpassgenport 
     <<: *logging 
+    <<: *labels
     
   webserver:
     image: nginx:alpine
@@ -58,6 +63,7 @@ services:
       - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf
       - ./cert:/etc/letsencrypt/live/${server_name}
       - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/log:/var/log/nginx
     sysctls:
       - net.core.somaxconn=1024
       - net.ipv4.tcp_syncookies=0
@@ -65,6 +71,7 @@ services:
       - 80:80
       - 443:443
     <<: *logging
+    <<: *labels
 
   haproxy:
     image: haproxy:alpine
@@ -83,7 +90,6 @@ services:
     volumes:
       - ./haproxy/config/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
       - ./cert:/etc/ssl/main
-      #- /var/run/docker.sock:/var/run/docker.sock
     healthcheck:
       test: ["CMD-SHELL", "nc localhost ${HAPROXY_PORT} </dev/null && echo 0 || exit 1"]
       interval: 10s
@@ -91,6 +97,7 @@ services:
       retries: 3
       start_period: 30s
     <<: *logging       
+    <<: *labels
    
   socks:
     image: mashiroota/microsocks:$${socks_version}
@@ -106,10 +113,11 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
+    <<: *labels
     <<: *logging
   
   socks_direct:
-    image: mashiroota/microsocks:$${socks_version}
+    image: mashiroota/microsocks:$${socks_direct_verion}
     ports:
       - mode: host
         protocol: tcp
@@ -124,11 +132,11 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
-    <<: *logging  
+    <<: *logging
+    <<: *labels  
 
 networks:
   app:
     driver: overlay
     ipam:
       driver: default
-    

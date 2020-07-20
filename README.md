@@ -1,1 +1,1 @@
-app_node example devops :)
+app_node example

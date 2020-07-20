@@ -15,6 +15,16 @@ data "cloudflare_zones" "get" {
 
 data "cloudflare_ip_ranges" "cloudflare" {}
 
+resource "cloudflare_record" "grafana" {
+  #zone_id = data.cloudflare_zones.get.zones[0].id
+  zone_id = var.CF_ZONE_ID
+  name    = "grafana"
+  value   = var.inst_pub_ip
+  type    = "A"
+  ttl     = 1 # ttl must be set to 1 when `proxied` is true
+  proxied = true
+}
+
 resource "cloudflare_record" "app_name" {
   #zone_id = data.cloudflare_zones.get.zones[0].id
   zone_id = var.CF_ZONE_ID

@@ -1,0 +1,20 @@
+notifiers:
+  - name: alert-slack
+    type: slack
+    uid: notifier2
+    settings:
+      uploadImage: true
+      url: ${SLACK_API_URL_GF}
+
+  - name: grafana-alertmanager
+    type: prometheus-alertmanager
+    uid: notifier1
+    settings:
+      uploadImage: true
+      url: http://alertmanager:9093
+
+delete_notifiers:
+  - name: alert-slack
+    uid: notifier2
+  - name: grafana-alertmanager
+    uid: notifier1

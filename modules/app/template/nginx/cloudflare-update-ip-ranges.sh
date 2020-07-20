@@ -2,7 +2,7 @@
 #/scripts/cloudflare-update-ip-ranges.sh
 
 # Location of the nginx config file that contains the CloudFlare IP addresses.
-CF_NGINX_CONFIG_FILE="/etc/nginx/conf.d/cloudflare"
+CF_NGINX_CONFIG_FILE="./conf.d/cloudflare"
 LOG_FILE="/var/log/messages"
 
 # The URLs with the actual IP addresses used by CloudFlare.
@@ -41,6 +41,8 @@ echo "$(date) $0: Unable to download CloudFlare files." >> $LOG_FILE
 exit 1
 fi
 
+echo $CF_TEMP_IP4 
+
 # Generate the new config file.
 NGINX_CONFIG_CONTENT="# CloudFlare IP Ranges\n"
 NGINX_CONFIG_CONTENT+="# Generated at $(date) by $0\n"
@@ -56,6 +58,8 @@ NGINX_CONFIG_CONTENT+="\n"
 
 NGINX_CONFIG_CONTENT+="real_ip_header CF-Connecting-IP;\n"
 NGINX_CONFIG_CONTENT+="\n"
+
+echo $NGINX_CONFIG_CONTENT
 
 echo -e $NGINX_CONFIG_CONTENT > $CF_NGINX_CONFIG_FILE
 
