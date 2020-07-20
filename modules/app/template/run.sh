@@ -18,9 +18,12 @@ sudo ln -s /opt/terraform /usr/bin/terraform
 sudo rm -f /home/${USERNAME}/terraform.zip
 sudo yum install httpd-tools -y
 sudo yum install python3 -y
+sudo amazon-linux-extras install epel
 sudo yum install s3cmd -y
 openssl dhparam -out /tmp/app/cert/nginx_dhparam.pem  1024 #4096
 sudo yum install nc -y
+sudo yum install htop -y
+sudo yum install iperf3 -y
 docker swarm init --advertise-addr ${inst_priv_ip}
 docker swarm update --task-history-limit 1
 

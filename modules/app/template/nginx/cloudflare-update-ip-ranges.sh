@@ -2,7 +2,7 @@
 #/scripts/cloudflare-update-ip-ranges.sh
 
 # Location of the nginx config file that contains the CloudFlare IP addresses.
-CF_NGINX_CONFIG_FILE="./conf.d/cloudflare"
+CF_NGINX_CONFIG_FILE="/opt/app/nginx/conf.d/cloudflare"
 LOG_FILE="/var/log/messages"
 
 # The URLs with the actual IP addresses used by CloudFlare.
